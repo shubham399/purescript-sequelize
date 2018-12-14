@@ -45,6 +45,7 @@ module Sequelize.Query.Options
   , include9
   , logging
   , logging2
+  , transaction
   ) where
 
 import Control.Monad.Eff (Eff)
@@ -55,7 +56,7 @@ import Data.Options (Option, opt)
 import Data.Tuple.Nested (type (/\), (/\))
 import Prelude (Unit)
 import Sequelize.Class (class IsWhere, class Model, encodeModel, toWhere)
-import Sequelize.Types (Alias, ModelOf)
+import Sequelize.Types (Alias, ModelOf, Transaction)
 
 where_ :: forall wh a. Model a => IsWhere wh => Option a (wh a)
 where_ = toWhere >$< opt "where"
@@ -200,6 +201,9 @@ logging = opt "logging"
 
 logging2 :: forall a eff. Model a => Option a (EffFn2 eff String String Unit)
 logging2 = opt "logging"
+
+transaction :: forall a. Model a => Option a Transaction
+transaction = opt "transaction"
 
 foreign import _array2 :: forall a b c. Fn2 a b (Array c)
 foreign import _array3 :: forall a b c d. Fn3 a b c (Array d)
